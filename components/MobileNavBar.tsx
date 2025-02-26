@@ -45,23 +45,22 @@ const MobileNavBar = ({ user }: MobileNavProps) => {
                       <Link
                         href={item.route}
                         key={item.label}
-                        className={cn("sidebar-link", {
+                        className={cn("mobilenav-sheet_close w-full", {
                           "bg-bank-gradient": isActive,
                         })}
                       >
-                        <div className="relative size-6">
-                          <Image
-                            src={item.imgURL}
-                            alt={item.label}
-                            fill
-                            className={cn({
-                              "brightness-[3] invert-0": isActive,
-                            })}
-                          />
-                        </div>
+                        <Image
+                          width={20}
+                          height={20}
+                          src={item.imgURL}
+                          alt={item.label}
+                          className={cn({
+                            "brightness-[3] invert-0": isActive,
+                          })}
+                        />
                         <p
-                          className={cn("sidebar-label", {
-                            "!text-white": isActive,
+                          className={cn("text-26 font-bold text-black-2", {
+                            "text-white": isActive,
                           })}
                         >
                           {item.label}
