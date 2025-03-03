@@ -15,23 +15,21 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-
-const formSchema = z.object({
-  username: z.string().min(8),
-});
+import CustomInput from "./CustomInput";
+import { authFormSchema } from "@/lib/utils";
 
 const AuthForm = ({ type }: { type: string }) => {
   const [user, setuser] = useState(null);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof authFormSchema>>({
+    resolver: zodResolver(authFormSchema),
     defaultValues: {
-      username: "",
+      email: "",
+      password: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof authFormSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
@@ -63,7 +61,25 @@ const AuthForm = ({ type }: { type: string }) => {
       {user ? (
         <div className="flex flex-col gap-4">{/* {plaidlink acc} */}</div>
       ) : (
-        <>Form</>
+        <>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <CustomInput
+                control={form.control}
+                label={"Email"}
+                name={"email"}
+                placeholder={"Enter your Email"}
+              />
+              <CustomInput
+                control={form.control}
+                label={"password"}
+                name={"password"}
+                placeholder={"Enter your Password"}
+              />
+              <Button type="submit">Submit</Button>
+            </form>
+          </Form>
+        </>
       )}
     </section>
   );
