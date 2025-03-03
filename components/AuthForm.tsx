@@ -72,7 +72,7 @@ const AuthForm = ({ type }: { type: string }) => {
               />
               <CustomInput
                 control={form.control}
-                label={"password"}
+                label={"Password"}
                 name={"password"}
                 placeholder={"Enter your Password"}
               />

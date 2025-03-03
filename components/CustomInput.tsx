@@ -7,13 +7,13 @@ import {
   FormMessage,
 } from "./ui/form";
 import { Input } from "./ui/input";
-import { Control } from "react-hook-form";
+import { Control, FieldPath } from "react-hook-form";
 import { z } from "zod";
 import { authFormSchema } from "@/lib/utils";
 
 interface CustomInputProps {
   control: Control<z.infer<typeof authFormSchema>>;
-  name: "email" | "password";
+  name: FieldPath<z.infer<typeof authFormSchema>>;
   label: string;
   placeholder: string;
 }
@@ -33,10 +33,15 @@ const CustomInput = ({
           <FormLabel className="form-label">{label}</FormLabel>
           <div className="flex w-full flex-col">
             <FormControl>
-              <Input placeholder={placeholder} {...field} />
+              <Input
+                placeholder={placeholder}
+                {...field}
+                className="input-class"
+                type={name === "password" ? "password" : "text"}
+              />
             </FormControl>
             <FormDescription>This is your public display name.</FormDescription>
-            <FormMessage />
+            <FormMessage className="form-message mt-2" />
           </div>
         </div>
       )}
