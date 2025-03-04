@@ -11,9 +11,11 @@ import { Control, FieldPath } from "react-hook-form";
 import { z } from "zod";
 import { authFormSchema } from "@/lib/utils";
 
+const formSchema = authFormSchema("signup");
+
 interface CustomInputProps {
-  control: Control<z.infer<typeof authFormSchema>>;
-  name: FieldPath<z.infer<typeof authFormSchema>>;
+  control: Control<z.infer<typeof formSchema>>;
+  name: FieldPath<z.infer<typeof formSchema>>;
   label: string;
   placeholder: string;
 }
@@ -50,3 +52,5 @@ const CustomInput = ({
 };
 
 export default CustomInput;
+
+// The object of life is not to be on the side of the majority, but to escape finding oneself in the ranks of the insane ~ Marcus Aurelius
