@@ -6,20 +6,15 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import CustomInput from "./CustomInput";
 import { authFormSchema } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { signIn, signUp } from "@/lib/actions/user.actions";
 
 const AuthForm = ({ type }: { type: string }) => {
+  const router = useRouter();
   const [user, setuser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -33,13 +28,48 @@ const AuthForm = ({ type }: { type: string }) => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     setIsLoading(true);
-    console.log(values);
+
+    try {
+      // sign up with Appwrite and create a plaid token
+      if (type === "sign-up") {
+        const newUser = await signUp(data);
+        setuser(newUser);
+        // const userData = {
+        //   firstName: data.firstName,
+        //   lastName: data.lastName,
+        //   email: data.email,
+        //   password: data.password,
+        //   address1: data.address,
+        //   city: data.city,
+        //   state: data.state,
+        //   postalCode: data.postalCode,
+        //   dateOfBirth: data.DoB,
+        //   ssn: data.ssn,
+        // };
+      }
+      // sign in with Appwrite and create a plaid token
+      if (type === "sign-in") {
+        const response = await signIn({
+          email: data.email,
+          password: data.password,
+        });
+
+        if (response) {
+          router.push("/");
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+
     setIsLoading(false);
-  }
+  };
 
   return (
     <section className="auth-form">
@@ -72,48 +102,60 @@ const AuthForm = ({ type }: { type: string }) => {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               {type === "signup" && (
                 <>
-                  <CustomInput
-                    control={form.control}
-                    label={"First Name"}
-                    name={"firstName"}
-                    placeholder={"Enter your First Name"}
-                  />
-                  <CustomInput
-                    control={form.control}
-                    label={"Last Name"}
-                    name={"lastName"}
-                    placeholder={"Enter your Last Name"}
-                  />
+                  <div className="flex gap-4">
+                    <CustomInput
+                      control={form.control}
+                      label={"First Name"}
+                      name={"firstName"}
+                      placeholder={"Enter your First Name"}
+                    />
+                    <CustomInput
+                      control={form.control}
+                      label={"Last Name"}
+                      name={"lastName"}
+                      placeholder={"Enter your Last Name"}
+                    />
+                  </div>
                   <CustomInput
                     control={form.control}
                     label={"Address"}
-                    name={"address"}
+                    name={"address1"}
                     placeholder={"Enter your Address"}
                   />
                   <CustomInput
                     control={form.control}
-                    label={"State"}
-                    name={"state"}
-                    placeholder={"ex: NY"}
+                    label={"City"}
+                    name={"city"}
+                    placeholder={"Enter your City"}
                   />
-                  <CustomInput
-                    control={form.control}
-                    label={"Postal Code"}
-                    name={"postalCode"}
-                    placeholder={"ex: 111011"}
-                  />
-                  <CustomInput
-                    control={form.control}
-                    label={"Date of Birth"}
-                    name={"DoB"}
-                    placeholder={"yyyy-mm-dd"}
-                  />
-                  <CustomInput
-                    control={form.control}
-                    label={"SSN"}
-                    name={"ssn"}
-                    placeholder={"ex: 1234"}
-                  />
+                  <div className="flex gap-4">
+                    <CustomInput
+                      control={form.control}
+                      label={"State"}
+                      name={"state"}
+                      placeholder={"ex: NY"}
+                    />
+                    <CustomInput
+                      control={form.control}
+                      label={"Postal Code"}
+                      name={"postalCode"}
+                      placeholder={"ex: 111011"}
+                    />
+                  </div>
+                  <div className="flex gap-4">
+                    <CustomInput
+                      control={form.control}
+                      label={"Date of Birth"}
+                      name={"dateOfBirth"}
+                      placeholder={"yyyy-mm-dd"}
+                    />
+                    <CustomInput
+                      control={form.control}
+                      label={"SSN"}
+                      name={"ssn"}
+                      placeholder={"ex: 1234"}
+                    />
+                  </div>
                 </>
               )}
 
