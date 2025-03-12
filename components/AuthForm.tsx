@@ -15,7 +15,7 @@ import { signIn, signUp } from "@/lib/actions/user.actions";
 
 const AuthForm = ({ type }: { type: string }) => {
   const router = useRouter();
-  const [user, setuser] = useState(null);
+  const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const formSchema = authFormSchema(type);
@@ -35,33 +35,20 @@ const AuthForm = ({ type }: { type: string }) => {
 
     try {
       // sign up with Appwrite and create a plaid token
-      if (type === "sign-up") {
+      if (type === "signup") {
         const newUser = await signUp(data);
-        setuser(newUser);
-        // const userData = {
-        //   firstName: data.firstName,
-        //   lastName: data.lastName,
-        //   email: data.email,
-        //   password: data.password,
-        //   address1: data.address,
-        //   city: data.city,
-        //   state: data.state,
-        //   postalCode: data.postalCode,
-        //   dateOfBirth: data.DoB,
-        //   ssn: data.ssn,
-        // };
+        setUser(newUser);
       }
       // sign in with Appwrite and create a plaid token
-      if (type === "sign-in") {
-        const response = await signIn({
-          email: data.email,
-          password: data.password,
-        });
+      // if (type === "sign-in") {
+      //   const response = await signIn({
+      //     email: data.email,
+      //     password: data.password,
+      //   });
 
-        if (response) {
-          router.push("/");
-        }
-      }
+      // if (response) {
+      //   router.push("/");
+      // }
     } catch (error) {
       console.log(error);
     } finally {

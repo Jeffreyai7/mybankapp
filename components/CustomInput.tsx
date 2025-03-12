@@ -36,6 +36,7 @@ const CustomInput = ({
           <div className="flex w-full flex-col">
             <FormControl>
               <Input
+                id={`${name}-form-item`}
                 placeholder={placeholder}
                 {...field}
                 className="input-class"
